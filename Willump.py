@@ -1,9 +1,25 @@
 from DevKey import *
 import json
 import urllib.request
+import os
 APIKey = key
 summonerID='' 
-
+def pathSel(fileName): #function that converts input filename to full ile path
+    #file must be in same path as this file, and takes format 'FileName.FileExt'
+    ProjectPath = (os.path.dirname(os.path.realpath(__file__)))
+    output = ProjectPath + "\\" + fileName
+    return output
+  
+with open(pathSel('champList.json')) as f:#load json champ info
+   data = json.load(f)
+CK=[]
+CN=[]
+for n in data["data"]: #goes through each champion, adds the key to one array,
+    #and the id to another, to be put together in a dictionary
+    CK.append(data["data"][n]['key'])
+    CN.append(data["data"][n]['id'])
+champDetails = dict(zip(CK,CN))#combines name and key of each champ into tuple dictionary
+#print(champDetails['266'])
 def SumDetails():#function that retrieves summoner information from summoner name (EUW only for the moment)
     global summonerID
     SumName = input("Enter Summoner Name: ")
@@ -17,7 +33,7 @@ def SumDetails():#function that retrieves summoner information from summoner nam
     summonerID = str(infoList['id'])#stores summoner id for use with other api functions
     return infoList
 
-def ChampDetails(): #function that returns information related to 
+def ChampDetails(): #function that returns information related to a selected champion
     if summonerID == '':
         SumDetails()
     else:
@@ -27,6 +43,7 @@ def ChampDetails(): #function that returns information related to
         url += APIKey
         contents = urllib.request.urlopen(url).read()
         ChampDetailsList = (json.loads(contents))
+        
         return ChampDetailsList
 
 print(SumDetails())
