@@ -59,6 +59,7 @@ def ChampSumInfo(): #function that returns information related to a selected cha
     url += APIKey
     contents = urllib.request.urlopen(url).read()
     SumChampInfo = (json.loads(contents))
+    print(SumChampInfo)
     #above value has keys: playerId, championId, championLevel, championPoints, lastPlayTime
     #championPointsSinceLastLevel, championPointsUntilNextLevel, chestGranted, tokensEarned
     return
@@ -67,5 +68,17 @@ def champStats(): #return champion information from json file
     CN = input('Enter Champion Name (Capitalise no spaces) ')
     return data['data'][CN]
   
+def rankedInfo():#returns information about a summoner's rank
+    if summonerID == '':
+        SumInfo()
+    url = 'https://euw1.api.riotgames.com/lol/league/v3/positions/by-summoner/'
+    url += summonerID
+    url += '?api_key='
+    url += APIKey   
+    contents = urllib.request.urlopen(url).read()
+    sumRankedInfo = (json.loads(contents))
+    return sumRankedInfo     
+
+
 
 
